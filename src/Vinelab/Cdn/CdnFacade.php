@@ -81,7 +81,7 @@ class CdnFacade implements CdnFacadeInterface
         return $this->generateUrl($path, 'public/');
     }
 	
-	/**
+	  /**
      * this function will be called from the 'views' using the
      * 'Cdn' facade {{Cdn::elixir('')}} to convert the elixir generated file path into
      * it's CDN url.
@@ -92,7 +92,7 @@ class CdnFacade implements CdnFacadeInterface
      *
      * @throws Exceptions\EmptyPathException, \InvalidArgumentException
      */
-	public function elixir($path)
+	  public function elixir($path)
     {
         static $manifest = null;
         if (is_null($manifest)) {
@@ -100,6 +100,29 @@ class CdnFacade implements CdnFacadeInterface
         }
         if (isset($manifest[$path])) {
             return $this->generateUrl('build/' . $manifest[$path], 'public/');
+        }
+        throw new \InvalidArgumentException("File {$path} not defined in asset manifest.");
+    }
+
+    /**
+     * this function will be called from the 'views' using the
+     * 'Cdn' facade {{Cdn::mix('')}} to convert the Laravel 5.4 webpack mix
+     * generated file path into it's CDN url.
+     *
+     * @param $path
+     *
+     * @return mixed
+     *
+     * @throws Exceptions\EmptyPathException, \InvalidArgumentException
+     */
+    public function mix($path)
+    {
+        static $manifest = null;
+        if (is_null($manifest)) {
+            $manifest = json_decode(file_get_contents(public_path('mix-manifest.json')), true);
+        }
+        if (isset($manifest[$path])) {
+            return $this->generateUrl($manifest[$path], 'public/');
         }
         throw new \InvalidArgumentException("File {$path} not defined in asset manifest.");
     }
