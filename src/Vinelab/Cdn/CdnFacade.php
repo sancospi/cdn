@@ -125,7 +125,7 @@ class CdnFacade implements CdnFacadeInterface
             $path = $manifest[$path];
             if ($path[0] == '/')
                 $path = substr($path, 1);
-            return $this->generateUrl($path, 'public/');
+            return $this->generateUrl($path, '');
         }
         throw new \InvalidArgumentException("File {$path} not defined in asset manifest.");
     }
